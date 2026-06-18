@@ -1,7 +1,5 @@
 package resume
 
-import org.scalatest.funsuite.AnyFunSuite
-
 class LocaleSpec extends AnyFunSuite {
   test("loadAll returns correct list from test file") {
     val list = Locale.loadAll("test-locales.yaml")

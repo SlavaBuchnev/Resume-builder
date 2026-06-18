@@ -1,7 +1,5 @@
 package resume
 
-import org.scalatest.funsuite.AnyFunSuite
-
 class ThemeSpec extends AnyFunSuite {
 
   test("loadAll should return correct number of themes from test file") {
