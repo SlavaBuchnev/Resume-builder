@@ -1,19 +1,19 @@
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.scalajs.js
+
 import com.raquo.laminar.api.L._
 import io.circe.parser._
 import io.circe.syntax._
 import org.scalajs.dom
 import org.scalajs.dom.Fetch.fetch
 import resume._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.scalajs.js
-import scala.util.{Failure, Success}
 
 object Main {
   def main(args: Array[String]): Unit = {
     val appContainer = dom.document.getElementById("app")
     appContainer.innerHTML = ""
-    val app = div(child <-- AppState.currentView.signal.map {
+    val app = div(child <-- UIState.currentView.signal.map {
       case "login" => loginView()
       case "register" => registerView()
       case "resume" => resumeView()
@@ -54,8 +54,8 @@ object Main {
               .map { text =>
                 decode[AuthResponse](text) match {
                   case Right(auth) =>
-                    AppState.token.set(Some(auth.token))
-                    AppState.currentView.set("resume")
+                    UIState.token.set(Some(auth.token))
+                    UIState.currentView.set("resume")
                     errorVar.set("")
                   case Left(_) =>
                     errorVar.set("Login failed")
@@ -67,7 +67,7 @@ object Main {
           }
         },
       ),
-      a("Register", onClick.preventDefault --> { _ => AppState.currentView.set("register") }),
+      a("Register", onClick.preventDefault --> { _ => UIState.currentView.set("register") }),
     )
   }
 
@@ -107,8 +107,8 @@ object Main {
               .map { text =>
                 decode[AuthResponse](text) match {
                   case Right(auth) =>
-                    AppState.token.set(Some(auth.token))
-                    AppState.currentView.set("resume")
+                    UIState.token.set(Some(auth.token))
+                    UIState.currentView.set("resume")
                     errorVar.set("")
                   case Left(_) =>
                     errorVar.set("Registration failed")
@@ -120,7 +120,7 @@ object Main {
           }
         },
       ),
-      a("Back to login", onClick.preventDefault --> { _ => AppState.currentView.set("login") }),
+      a("Back to login", onClick.preventDefault --> { _ => UIState.currentView.set("login") }),
     )
   }
 
@@ -130,14 +130,14 @@ object Main {
     button(
       "Logout",
       onClick --> { _ =>
-        AppState.token.set(None)
-        AppState.currentView.set("login")
+        UIState.token.set(None)
+        UIState.currentView.set("login")
       },
     ),
   )
 }
 
-object AppState {
+object UIState {
   val token = Var(Option.empty[String])
   val currentView = Var("login")
 }
