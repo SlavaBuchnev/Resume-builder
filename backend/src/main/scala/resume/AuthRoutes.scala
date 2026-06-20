@@ -50,6 +50,12 @@ class AuthRoutes(
         }
       }
 
+    case req @ POST -> Root / "resume" / "html" =>
+      req.as[ResumeSaveHtmlRequest].flatMap { saveReq =>
+        resumeStore.save(saveReq.userId, saveReq.html) *>
+          Ok("Resume HTML saved")
+      }
+
     case GET -> Root / "resume" / userIdStr =>
       Try(UUID.fromString(userIdStr)).fold(
         _ => BadRequest("Invalid user ID"),

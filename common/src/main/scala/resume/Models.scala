@@ -22,6 +22,12 @@ object AuthResponse {
   implicit val encoder: Encoder[AuthResponse] = deriveEncoder
 }
 
+case class ResumeSaveHtmlRequest(userId: UserId, html: String)
+object ResumeSaveHtmlRequest {
+  implicit val decoder: Decoder[ResumeSaveHtmlRequest] = deriveDecoder
+  implicit val encoder: Encoder[ResumeSaveHtmlRequest] = deriveEncoder
+}
+
 case class User(
     id: UserId,
     email: String,

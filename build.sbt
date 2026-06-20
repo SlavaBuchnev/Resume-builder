@@ -31,7 +31,7 @@ lazy val backend = project
       "org.http4s" %% "http4s-dsl" % http4sVersion,
       "org.http4s" %% "http4s-ember-server" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,
-      "org.mindrot" % "jbcrypt" % "0.4"
+      "org.mindrot" % "jbcrypt" % "0.4",
     ),
     // Копируем JS фронтенда в ресурсы backend
     Compile / resourceGenerators += Def.task {
@@ -54,5 +54,6 @@ lazy val frontend = project
     libraryDependencies ++= Seq(
       "com.raquo" %%% "laminar" % laminarVersion,
       "org.scala-js" %%% "scalajs-dom" % "2.4.0",
+      "com.lihaoyi" %%% "scalatags" % "0.12.0",
     ),
   )

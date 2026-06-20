@@ -65,6 +65,7 @@ object RegisterView {
                 decode[AuthResponse](text) match {
                   case Right(auth) =>
                     UIState.token.set(Some(auth.token))
+                    UIState.userId.set(Some(auth.user.id))
                     UIState.currentView.set("resume")
                     errorVar.set("")
                   case Left(_) =>
