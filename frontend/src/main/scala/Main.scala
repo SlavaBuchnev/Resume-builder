@@ -27,18 +27,18 @@ object Main {
     val errorVar = Var("")
     div(
       h2("Login"),
-      input(typ("email"), placeholder("Email"), value <-- emailVar, onInput.mapToValue --> emailVar),
+      input(typ("emailOrLogin"), placeholder("Email/Login"), value <-- emailVar, onInput.mapToValue --> emailVar),
       input(typ("password"), placeholder("Password"), value <-- passVar, onInput.mapToValue --> passVar),
       div(color.red, child.text <-- errorVar),
       button(
         "Login",
         onClick.preventDefault --> { _ =>
-          val email = emailVar.now()
+          val emailOrLogin = emailVar.now()
           val pass = passVar.now()
-          if (email.isEmpty || pass.isEmpty) {
-            errorVar.set("Email and password required")
+          if (emailOrLogin.isEmpty || pass.isEmpty) {
+            errorVar.set("Email/Login and password required")
           } else {
-            val requestBody = LoginRequest(email, pass).asJson.noSpaces
+            val requestBody = LoginRequest(emailOrLogin, pass).asJson.noSpaces
             val respFuture = fetch(
               "/api/login",
               js.Dynamic
@@ -79,7 +79,7 @@ object Main {
     div(
       h2("Register"),
       input(typ("text"), placeholder("Name"), value <-- nameVar, onInput.mapToValue --> nameVar),
-      input(typ("email"), placeholder("Email"), value <-- emailVar, onInput.mapToValue --> emailVar),
+      input(typ("emailOrLogin"), placeholder("Email/Login"), value <-- emailVar, onInput.mapToValue --> emailVar),
       input(typ("password"), placeholder("Password"), value <-- passVar, onInput.mapToValue --> passVar),
       div(color.red, child.text <-- errorVar),
       button(

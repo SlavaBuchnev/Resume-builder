@@ -38,12 +38,12 @@ class ThemeSpec extends AnyFunSuite {
     assert(names.contains("dark"))
   }
 
-  test("fromString should return Some for an existing theme name") {
+  test("fromString should return Some for an existing theme login") {
     assert(Theme.fromString("classic").isDefined)
     assert(Theme.fromString("dark").isDefined)
   }
 
-  test("fromString should return None for a non-existent theme name") {
+  test("fromString should return None for a non-existent theme login") {
     assert(Theme.fromString("unicorn").isEmpty)
   }
 }

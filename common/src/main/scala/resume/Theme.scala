@@ -7,7 +7,7 @@
 //import org.yaml.snakeyaml.Yaml
 //
 //case class Theme(
-//    name: String,
+//    login: String,
 //    primaryColor: String,
 //    secondaryColor: String,
 //    backgroundColor: String,
@@ -26,7 +26,7 @@
 //        .asInstanceOf[java.util.List[java.util.Map[String, Any]]]
 //      list.asScala.map { m =>
 //        Theme(
-//          name = m.get("name").toString,
+//          login = m.get("login").toString,
 //          primaryColor = m.get("primaryColor").toString,
 //          secondaryColor = m.get("secondaryColor").toString,
 //          backgroundColor = m.get("backgroundColor").toString,
@@ -41,5 +41,5 @@
 //  // use on production
 //  def all: List[Theme] = loadAll("themes.yaml")
 //
-//  def fromString(s: String): Option[Theme] = all.find(_.name == s)
+//  def fromString(s: String): Option[Theme] = all.find(_.login == s)
 //}

@@ -17,11 +17,11 @@ class AuthRoutes(
     case req @ POST -> Root / "register" =>
       req.as[SignupRequest].flatMap { signup =>
         usersRef.get.flatMap { users =>
-          if (users.exists(_.email == signup.email))
-            Conflict("Email already exists")
+          if (users.exists(u => (u.login == signup.login) || (u.email == signup.email)))
+            Conflict("Email/login already exists")
           else {
             nextIdRef.get.flatMap { id =>
-              val user = User(id, signup.email, signup.name, signup.password)
+              val user = User(id, signup.email, signup.login, signup.password)
               val token = UUID.randomUUID().toString
               for {
                 _ <- usersRef.update(_ :+ user)
@@ -35,18 +35,25 @@ class AuthRoutes(
       }
 
     case req @ POST -> Root / "login" =>
-      req.as[LoginRequest].flatMap { login =>
-        usersRef.get.map(_.find(u => u.email == login.email && u.password == login.password)).flatMap {
-          case None =>
-            Response[IO](status = Unauthorized)
-              .withEntity("Invalid credentials")
-              .pure[IO]
-          case Some(user) =>
-            val token = UUID.randomUUID().toString
-            tokensRef.update(_ + (token -> user.id)).flatMap { _ =>
-              Ok(AuthResponse(token, user.copy(password = "")))
-            }
-        }
+      req.as[LoginRequest].flatMap { request =>
+        usersRef.get
+          .map(
+            _.find(u =>
+              (u.email == request.emailOrLogin || u.login == request.emailOrLogin) &&
+                u.password == request.password,
+            ),
+          )
+          .flatMap {
+            case None =>
+              Response[IO](status = Unauthorized)
+                .withEntity("Invalid credentials")
+                .pure[IO]
+            case Some(user) =>
+              val token = UUID.randomUUID().toString
+              tokensRef.update(_ + (token -> user.id)).flatMap { _ =>
+                Ok(AuthResponse(token, user.copy(password = "")))
+              }
+          }
       }
   }
 }
