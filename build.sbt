@@ -24,6 +24,7 @@ lazy val commonJS = common.js
 lazy val backend = project
   .in(file("backend"))
   .dependsOn(commonJVM)
+  .enablePlugins(JavaAppPackaging)
   .settings(
     name := "backend",
     libraryDependencies ++= Seq(
