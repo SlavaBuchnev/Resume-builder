@@ -21,10 +21,7 @@ object ResumeView {
           if (resp.status == 200) resp.text().toFuture.map(Some(_))
           else Future.successful(None)
         }
-        .map { htmlOpt =>
-          resumeHtmlVar.set(htmlOpt)
-          if (htmlOpt.isEmpty) isEditing.set(true)
-        }
+        .map(resumeHtmlVar.set)
         .recover { case _ => isEditing.set(true) }
     }
 
@@ -44,14 +41,13 @@ object ResumeView {
               width := "100%",
               height := "400px",
             ),
-            button("Редактировать", onClick.preventDefault --> (_ => isEditing.set(true))),
+            button("Редактировать", onClick.preventDefault --> { _ => UIState.currentView.set("editor") }),
           )
-        case None => div("Резюме ещё не создано")
-      },
-      child <-- isEditing.signal.map {
-        case true =>
-          userIdOpt.map(uid => ResumeEditor(uid)).getOrElse(div("Пользователь не определён"))
-        case false => div()
+        case None =>
+          div(
+            span("Резюме ещё не создано."),
+            button("Создать", onClick.preventDefault --> { _ => UIState.currentView.set("editor") }),
+          )
       },
       button("Выйти", onClick.preventDefault --> (_ => logoutHandler())),
     )

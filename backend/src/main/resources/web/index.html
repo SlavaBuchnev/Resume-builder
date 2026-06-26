@@ -4,9 +4,35 @@
     <meta charset="UTF-8">
     <title>Resume Builder</title>
     <style>
-        body { font-family: sans-serif; max-width: 400px; margin: 2rem auto; }
-        input, button { display: block; width: 100%; margin-bottom: 1rem; padding: 0.5rem; }
-        a { color: blue; cursor: pointer; text-decoration: underline; }
+        /* Базовые стили (для логина, регистрации, просмотра) */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        body {
+            font-family: sans-serif;
+            max-width: 400px;
+            margin: 2rem auto;
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+        }
+        a {
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Класс, который будет добавляться при входе в редактор */
+        body.editor-mode {
+            max-width: none;
+            margin: 0;
+            height: 100vh;
+        }
     </style>
 </head>
 <body>

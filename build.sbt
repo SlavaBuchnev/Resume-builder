@@ -32,6 +32,7 @@ lazy val backend = project
       "org.http4s" %% "http4s-ember-server" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,
       "org.mindrot" % "jbcrypt" % "0.4",
+      "com.github.pureconfig" %% "pureconfig-core" % "0.17.4"
     ),
     // Копируем JS фронтенда в ресурсы backend
     Compile / resourceGenerators += Def.task {

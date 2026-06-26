@@ -6,10 +6,25 @@ object Main {
   def main(args: Array[String]): Unit = {
     val appContainer = dom.document.getElementById("app")
     appContainer.innerHTML = ""
+    UIState.currentView.signal.foreach { view =>
+      val body = dom.document.body
+      if (view == "editor") {
+        body.classList.add("editor-mode")
+      } else {
+        body.classList.remove("editor-mode")
+      }
+    }(unsafeWindowOwner)
+
     val app = div(child <-- UIState.currentView.signal.map {
       case "login" => LoginView()
       case "register" => RegisterView()
       case "resume" => ResumeView()
+      case "editor" =>
+        UIState.userId.now() match {
+          case Some(userId) => ResumeEditor(userId)
+          case None => LoginView()
+        }
+
     })
     render(appContainer, app)
   }
