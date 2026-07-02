@@ -22,5 +22,15 @@ object AppConfig {
   implicit val appConfigReader: ConfigReader[AppConfig] =
     ConfigReader.forProduct4("statePath", "resumePath", "port", "host")(AppConfig.apply)
 
-  def loadOrThrow(): AppConfig = ConfigSource.default.at("app").loadOrThrow[AppConfig]
+  def loadOrThrow(): AppConfig = {
+      val base = ConfigSource.default.at("app").loadOrThrow[AppConfig]
+      val port = sys.env.get("PORT")
+        .flatMap(s => scala.util.Try(s.toInt).toOption)
+        .flatMap(Port.fromInt)
+        .getOrElse(base.port)
+      val host = sys.env.get("HOST")
+        .flatMap(Host.fromString)
+        .getOrElse(base.host)
+      AppConfig(base.statePath, base.resumePath, port, host)
+  }
 }
